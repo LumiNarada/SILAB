@@ -1,0 +1,87 @@
+#formulario{
+    background-color: #A00505 !important;
+    top: 30% !important;
+    align-self: center;
+    height: 500px;
+    width: 500px;
+    border-radius: 2pc;
+}
+
+#forms{
+    text-align: center;
+
+}
+
+#inicio{
+    background-color: #A42C2C;
+    width: 200px;
+    border-radius: 2pc;
+}
+
+#inicio h3{
+    color: white;
+}
+
+.boton{
+    background-color: #430505;
+    width: 150px;
+    border-radius: 2pc;
+}
+
+.boton a{
+    color: white !important;
+}
+
+
+
+
+
+
+nav{
+    background-color: #A00505 !important;
+
+}
+
+h10{
+    color: white !important;
+}
+
+body{
+    background-color: rgb(232, 228, 228) !important;
+}
+
+
+.titulo{
+    background-color: #A00505;
+    border-radius: 2pc;
+}
+
+.titulo h1{
+    color: white;
+    text-align: center;
+}
+
+select{
+    background-color: rgb(232, 228, 228) !important;
+    border-radius: 2pc !important;
+}
+
+.formulario{
+    background-color: rgb(190, 184, 184);
+    height: 300px;
+    border-radius: 2pc;
+}
+
+
+#calendar { font-family:Arial;font-size:12px;}
+#calendar caption {text-align:left;padding:5px 10px; background-color:#003366;
+    color:#fff;font-weight:bold;font-size:medium;}
+#calendar caption div:nth-child(1) {float:left;}
+#calendar caption div:nth-child(2) {float:right;}
+#calendar caption div:nth-child(2) a {cursor:pointer;}
+#calendar th {background-color:#006699;color:#fff;width:40px;}
+#calendar td {text-align:right;padding:2px 5px;background-color:silver;}
+#calendar .hoy {background-color:red;}
+#calendar{
+    height: 500px;
+}

@@ -8,5 +8,13 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    public function muro(){
+        return view('muro');
+    }
+    public function inscripcion(){
+        return view('inscripcion');
+    }
+    public function practica(){
+        return view('practica');
+    }
 }
