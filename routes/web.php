@@ -20,11 +20,12 @@ Route::controller(AuthController::class)->group(function(){
     Route::get('/login', 'login')->name('login');
     Route::get('/signup', 'signup')->name('signup');
     Route::post('/registration', 'registration')->name('registration');
-    Route::post('/initialization', 'initialization')->name('initialization');
+    Route::post('/checkLogIn', 'checkLogIn')->name('checkLogIn');
 });
 
 Route::controller(Controller::class)->group(function(){
     Route::get('/muro', 'muro')->name('muro');
     Route::get('/practica', 'practica')->name('practica');
     Route::get('/inscripcion', 'inscripcion')->name('inscripcion');
+    Route::get('/logout', 'logout')->name('logout');
 });

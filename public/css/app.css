@@ -80,8 +80,9 @@ select{
 #calendar caption div:nth-child(2) {float:right;}
 #calendar caption div:nth-child(2) a {cursor:pointer;}
 #calendar th {background-color:#006699;color:#fff;width:40px;}
-#calendar td {text-align:right;padding:2px 5px;background-color:silver;}
+#calendar td {text-agn:right;padding:2px 5px;background-color:silver;}
 #calendar .hoy {background-color:red;}
 #calendar{
     height: 500px;
 }
+
