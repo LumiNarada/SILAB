@@ -186,6 +186,7 @@ body {
 
 footer {
   position: fixed !important;
+
   left: 0;
   bottom: 0;
   width: 100%;
@@ -212,5 +213,17 @@ footer {
         margin: 3px;
     }
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
 
+.clear { clear: both; height: 150px; }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellidos');
             $table->string('grupo');
-            $table->unsignedBigInteger('sesion_id');
-            $table->foreign('sesion_id')->references('id')->on('sesion');
+            $table->unsignedBigInteger('practica_id');
+            $table->foreign('practica_id')->references('id')->on('practica');
             $table->timestamps();
         });
     }

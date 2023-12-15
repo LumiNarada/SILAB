@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Administrador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -13,6 +14,10 @@ class AuthController extends Controller
         return view('auth.login');
     }
     public function signup(){
+        if(Session::has('loginId')){
+            $administrador = Administrador::where('id', '=', Session::get('loginId'))->first();
+            return view('auth.signup', compact('administrador'));
+        }
         return view('auth.signup');
     }
      public function checkLogIn(Request $request){
@@ -20,23 +25,45 @@ class AuthController extends Controller
              'usuario' => 'required',
              'contrasena'=>'required',
          ]);
-         $res = Administrador::where('usuario', '=', Str::upper($request->usuario))
-             ->count();
-         if($res > 0){
-             $res = Administrador::where('usuario', '=', Str::upper($request->usuario))
-                 ->select('id','contrasena')
-                 ->get();
-             foreach ($res as $usuario){
-                 if($request->contrasena == $usuario->contrasena){
-                     $request->session()->put('loginId', $usuario->id);
-                     return redirect('muro');
-                 }else{
-                     return back()->with('fail', 'Contraseña Incorrecta');
-                 }
+         $administrador = Administrador::where('usuario', '=', Str::lower($request->usuario))->first();
+         if($administrador){
+             if(Hash::check($request->contrasena, $administrador->contrasena)){
+                 $request->session()->put('loginId', $administrador->id);
+                 return redirect('muro');
+             }else{
+                 return back()->with('fail', 'Contraseña Incorrecta');
              }
          } else {
              return back()->with('fail', 'Usuario no localizado');
          }
         return view('\muro');
      }
+    public function registration(Request $request){
+        $request->validate([
+            'usuario'=>'required|unique:administrador',
+            'titulo'=>'required',
+            'nombre'=>'required',
+            'apellidos'=>'required',
+            'contrasena'=>'required|min:6|max:20|confirmed',
+            'contrasena_confirmation'=>'required',
+        ]);
+        $administrador = new Administrador();
+        $administrador->usuario = Str::lower($request->usuario);
+        $administrador->titulo = $request->titulo;
+        $administrador->nombre = $request->nombre;
+        $administrador->apellidos = $request->apellidos;
+        $administrador->contrasena = Hash::make($request->contrasena);
+        $res = $administrador->save();
+        if($res){
+            return view('auth.login')->with('success', 'Usuario administrador registrado correctamente');
+        } else {
+            return back()->with('fail', 'Error al registrar usuario. Inténtalo más tarde.');
+        }
+    }
+    public function logout(){
+        if (Session::has('loginId')){
+            Session::pull('loginId');
+            return redirect('/');
+        }
+    }
 }
