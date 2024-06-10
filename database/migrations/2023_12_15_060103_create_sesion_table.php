@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('practica_id')->references('id')->on('practica');
             $table->timestamps();
         });
+
     }
 
     /**

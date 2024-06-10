@@ -18,6 +18,12 @@ class AuthController extends Controller
             $administrador = Administrador::where('id', '=', Session::get('loginId'))->first();
             return view('auth.signup', compact('administrador'));
         }
+        else{
+            $administrador = Administrador::find(1);
+            if ($administrador){
+                return redirect()->route('muro');
+            }
+        }
         return view('auth.signup');
     }
      public function checkLogIn(Request $request){
@@ -41,7 +47,6 @@ class AuthController extends Controller
     public function registration(Request $request){
         $request->validate([
             'usuario'=>'required|unique:administrador',
-            'titulo'=>'required',
             'nombre'=>'required',
             'apellidos'=>'required',
             'contrasena'=>'required|min:6|max:20|confirmed',
@@ -49,7 +54,6 @@ class AuthController extends Controller
         ]);
         $administrador = new Administrador();
         $administrador->usuario = Str::lower($request->usuario);
-        $administrador->titulo = $request->titulo;
         $administrador->nombre = $request->nombre;
         $administrador->apellidos = $request->apellidos;
         $administrador->contrasena = Hash::make($request->contrasena);
@@ -65,5 +69,9 @@ class AuthController extends Controller
             Session::pull('loginId');
             return redirect('/');
         }
+    }
+
+    public function prueba(){
+        return view('prueba');
     }
 }

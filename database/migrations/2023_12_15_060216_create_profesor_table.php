@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellidos');
             $table->unsignedBigInteger('sesion_id');
-            $table->foreign('sesion_id')->references('id')->on('sesion');
+            $table->foreign('sesion_id')->references('id')->on('sesion')->onDelete('cascade');
             $table->timestamps();
         });
     }

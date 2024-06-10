@@ -99,7 +99,7 @@ body {
   margin: 0px 1px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991.5px) {
   #nav-container {
     width: 85%;
   }
@@ -185,8 +185,6 @@ body {
 }
 
 footer {
-  position: fixed !important;
-
   left: 0;
   bottom: 0;
   width: 100%;
@@ -227,3 +225,10 @@ input[type=number] {
 
 
 .clear { clear: both; height: 150px; }
+
+@media (max-width: 991.5px) {
+    #titulo-silab {
+        display: none;
+    }
+}
+

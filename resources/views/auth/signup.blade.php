@@ -23,12 +23,11 @@
                                 @endif
                                 @csrf
                                 <div class="mb-3"><input class="form-control" type="text" name="usuario" placeholder="Usuario" value="{{old('usuario')}}" autocomplete="off"><span class="text-danger">@error('usuario'){{$message}}@enderror</span></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="titulo" placeholder="Título" value="{{old('titulo')}}" autocomplete="off"><span class="text-danger">@error('titulo'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="nombre" placeholder="Nombre" value="{{old('nombre')}}" autocomplete="off"><span class="text-danger">@error('nombre'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="apellidos" placeholder="Apellidos" value="{{old('apellidos')}}" autocomplete="off"><span class="text-danger">@error('apellidos'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena"  placeholder="Contraseña" ><span class="text-danger">@error('contrasena'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena_confirmation"  placeholder="Confirme contraseña" ><span class="text-danger">@error('contrasena_confirmation'){{$message}}@enderror</span></div>
-                                <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" style="background: #cd171e;">Acceder</button></div>
+                                <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" style="background: #cd171e;">Registrar</button></div>
                             </form>
                         </div>
                     </div>

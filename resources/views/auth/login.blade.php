@@ -5,7 +5,7 @@
         <div class="row mb-5">
             <div class="col-md-8 col-xl-6 text-center mx-auto">
                 <h2>Inicio de Sesión</h2>
-                <p id="login-p" class="w-lg-50">Si eres un alumno, no es necesario que inicies sesión para registrarte en alguna práctica, puedes hacerlo directamente ingresando tus datos en alguna de las sesiones de la <a href="#">lista</a>&nbsp;de prácticas.</p>
+                <p id="login-p" class="w-lg-50">Si eres un alumno, no es necesario que inicies sesión para registrarte en alguna práctica, puedes hacerlo directamente ingresando tus datos en alguna de las sesiones de la <a href="{{route('muro')}}">lista</a>&nbsp;de prácticas.</p>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
