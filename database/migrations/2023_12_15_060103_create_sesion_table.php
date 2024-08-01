@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('sesion', function (Blueprint $table) {
             $table->id();
             $table->string('aula');
+            $table->string('profesor')->nullable();
             $table->dateTime('fecha');
+            $table->time('duracion');
+            $table->tinyInteger('cupo');
+            $table->tinyInteger('vacantes');
             $table->unsignedBigInteger('practica_id');
             $table->foreign('practica_id')->references('id')->on('practica');
             $table->timestamps();

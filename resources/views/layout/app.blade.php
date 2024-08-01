@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>SILAB</title>
     <link rel="stylesheet" href={{asset('assets/bootstrap/css/bootstrap.min.css')}}>
-
+    <link rel="icon" href={{asset('../images/logo-fi-rojo.png')}}>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!--
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     -->
@@ -22,10 +23,10 @@
     <link rel="stylesheet" href={{asset('assets/css/styles.css')}}>
 </head>
 
-<body style="background: #faf8fb; display: flex; flex-direction: column; min-height: 100vh !important">
+<body style="font-family: Roboto; background: #faf8fb; display: flex; flex-direction: column; min-height: 100vh !important">
 @if(isset($administrador))
     <nav class="navbar navbar-expand-lg sticky-top bg-body" id="navbar-complete" style="background: #cd171e;">
-        <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" ondblclick="doubleclick()" href="{{ route('muro') }}" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong>{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong id="silabnavbar">{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <p style="color: #faf8fb; margin:auto">{{$administrador->nombre}} {{$administrador->apellidos}}</p>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav d-lg-flex ms-auto justify-content-lg-center">
@@ -43,8 +44,8 @@
     </nav>
 @else
     <nav class="navbar navbar-expand-lg sticky-top bg-body" id="navbar-complete" style="background: #cd171e;">
-        <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" ondblclick="doubleclick()" href="{{ route('login') }}" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong>{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Sistema De Inscripción Para Laboratorios <br> De La Coordinación de Matemáticas.<br>División De Ciencias Básicas.</p>
+        <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong id="silabnavbar">{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Sistema De Inscripción Para Prácticas <br> Optativas De Los Laboratorios De <br> La División De Ciencias Básicas.</p>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav d-lg-flex ms-auto justify-content-lg-center">
                     <li class="nav-item"><a class="nav-link" href="https://dcb.ingenieria.unam.mx" style="color: #faf8fb; margin-left: 5px; margin-right: 5px">División de Ciencias Básicas</a></li>
@@ -84,9 +85,14 @@
 @endif
 <script src={{asset('assets/bootstrap/js/bootstrap.min.js')}}></script>
 <script>
-    function doubleclick() {
+    $(document).ready(function(){
+        $("#silabnavbar").dblclick(function(){
 
-    }
+            console.log('a');
+            window.location.href = "{{ route('login') }}";
+        });
+    });
+    console.log('a');
 </script>
 </body>
 </html>

@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use function Illuminate\Events\queueable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
@@ -39,16 +41,19 @@ class Controller extends BaseController
         $asignaturas = Asignatura::all();
         $administrador = Administrador::where('id', '=', Session::get('loginId'))->first();
         $practica=Practica::where('id', '=', $id_practica)->first();
+        if ($practica == NULL) { return redirect('/'); }
         $asignatura=Asignatura::where('id', '=', $practica->asignatura_id)->first();
         $alumnos = Alumno::all();
-        $sesiones=Sesion::where('practica_id', '=', $id_practica)->get();
+        $sesiones=Sesion::where('practica_id', '=', $id_practica)->orderBy('fecha')->get();
         foreach ($sesiones as $sesion){
-            $sesion->fecha= explode(' ' ,$sesion->fecha);
-            $sesion->fechaDia = explode('-' ,$sesion->fecha[0]);
-            $sesion->fechaHora = explode(':' ,$sesion->fecha[1]);
+            $sesion->fechaExplode= explode(' ' ,$sesion->fecha);
+            $sesion->fechaDia = explode('-' ,$sesion->fechaExplode[0]);
+            $sesion->fechaHora = explode(':' ,$sesion->fechaExplode[1]);
+            $sesion->duracionExplode = explode(':' ,$sesion->duracion);
         }
-        $num=0;
-        return view('inscripcion')->with('practica',$practica)->with('administrador', $administrador)->with('alumnos', $alumnos)->with('num', $num)->with('asignatura', $asignatura)->with('asignaturas', $asignaturas)->with('sesiones', $sesiones);
+        $num=1;
+        $otroNum=1;
+        return view('inscripcion')->with('practica',$practica)->with('administrador', $administrador)->with('alumnos', $alumnos)->with('otroNum', $otroNum)->with('num', $otroNum)->with('asignatura', $asignatura)->with('asignaturas', $asignaturas)->with('sesiones', $sesiones);
     }
 
     public function storageAlumno(Request $request){
@@ -59,6 +64,15 @@ class Controller extends BaseController
             'cuenta' => 'required',
             'sesion' => 'required',
             'grupo' => 'required',
+            'correo'=>['required','regex:/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/']
+        ],[
+            'nombre.required' => 'El campo \'Nombre\' es requerido',
+            'apellidos.required' => 'El campo \'Apellidos\' es requerido',
+            'cuenta.required' => 'El campo \'Número de Cuenta\' es requerido',
+            'sesion.required' => 'El campo \'Sesion\' es requerido',
+            'grupo.required' => 'El campo \'Grupo\' es requerido',
+            'correo.required' => 'El campo \'Correo Electrónico\' es requerido',
+            'correo.regex' => "El correo electrónico ingresado no es válido"
         ]);
         $alumno = new Alumno();
         $alumno->nombre = $request->nombre;
@@ -66,20 +80,23 @@ class Controller extends BaseController
         $alumno->grupo = $request->grupo;
         $alumno->sesion_id = $request->sesion;
         $alumno->numeroCuenta = $request->cuenta;
+        $alumno->correo = $request->correo;
 
         $asignaturas = Asignatura::all();
         $practicas = Practica::all()->sortBy('orden');
-        $inscritos = Alumno::where('sesion_id', '=', $alumno->sesion_id)->get();
-
+        $sesion = Sesion::find($alumno->sesion_id);
+        $practica = Practica::find($sesion->practica_id);
+        $inscritos = DB::table('alumno')->join('sesion', 'sesion_id', '=', 'sesion_id')->join('practica', 'practica_id', '=', 'practica_id')->where('practica_id', '=', $practica->id)->get();
         foreach ($inscritos as $inscrito){
             if($inscrito->numeroCuenta == $alumno->numeroCuenta){
                 return back()->with('fail', 'El alumno asociado a ese número de cuenta ya se ha inscrito a esta práctica.');
             }
         }
         $res = $alumno->save();
-
         if($res){
-            return view('muro')->with('success', 'Inscripción realizada correctamente')->with('asignaturas',$asignaturas)->with('practicas', $practicas);;
+            $sesion->vacantes += 1;
+            $sesion->save();
+            return back()->with('success', 'Inscripción realizada correctamente. Sigue las indicaciones y preséntate el día de la sesión de laboratiorio. Enviaremos un correo electórnico para recordarte esta información un día antes de la clase.');
         } else {
             return back()->with('fail', 'Error en proceso de inscripción. Inténtalo más tarde.');
         }
@@ -106,26 +123,10 @@ class Controller extends BaseController
         return $pdf->stream();
     }
 
-    public function descargar(Request $request, $id_pdf){
-        $path = Storage::path("".$id_pdf);
+    public function descargar(Request $request, $id_asignatura, $id_pdf){
+        $path = Storage::path('pdf/'.$id_asignatura.'/'.$id_pdf);
         return response()->download($path);
     }
 
-    public function addSession(Request $request){
-        $request->validate([
-            'datetime' => 'required'
-        ]);
-        $sesion = new Sesion();
-        $sesion->practica_id = $request->practica_id;
-        $sesion->aula=" ";
-        $sesion->fecha = $request->datetime;
 
-        $res = $sesion->save();
-
-        if($res){
-            return redirect()->back()->with('success', 'Sesión añadida correctamente.');
-        } else {
-            return redirect()->back()->with('fail', 'Sesión no se pudo añadir.');
-        }
-    }
 }

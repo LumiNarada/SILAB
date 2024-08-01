@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('content')
-    <strong style="font-size: 37px; margin: auto" >{{ __('Agregar Práctica') }}</strong>
+    <strong style="font-size: 37px; margin: 10px auto 10px auto" >{{ __('Agregar Práctica') }}</strong>
 
     <div class="d-lg-flex justify-content-lg-center" style="text-align: center" >
         <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left;background: var(--bs-secondary-bg);">
@@ -14,7 +14,7 @@
                     @endif
                     @csrf
                     <div style="display: flex; flex-direction: row; ">
-                        <p style="font-size: large; color: #cd171e; margin: 0px;">* &nbsp;</p> <p style="font-size: small; color: #cd171e; margin: 0px"">Campo obligatorio</p>
+                        <p style="font-size: large; color: #cd171e; margin: 0px;">* &nbsp;</p> <p style="font-size: small; color: #cd171e; margin: 0px">Campo obligatorio</p>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-8">
@@ -27,20 +27,20 @@
                             <span class="text-danger">@error('asignatura'){{$message}}@enderror</span>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="inputPassword4" style="display:flex; flex-direction: row">N° de Práctica &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p></label>
-                            <input type="number" class="form-control" name="orden" placeholder="#">
+                            <label for="inputPassword4" style="display:flex; flex-direction: row">N° de Práctica &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                            <input type="number" class="form-control" name="orden" placeholder="#" autocomplete="off" value="{{old('orden')}}">
                             <span class="text-danger">@error('orden'){{$message}}@enderror</span>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="inputEmail4" style="display:flex; flex-direction: row">Nombre de la práctica &nbsp; <p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
-                            <input type="text" class="form-control" name="nombre" placeholder="Nombre" autocomplete="off">
+                            <input type="text" class="form-control" name="nombre" placeholder="Nombre" autocomplete="off" value="{{old('nombre')}}">
                             <span class="text-danger">@error('nombre'){{$message}}@enderror</span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4" style="display:flex; flex-direction: row">Indicaciones &nbsp; <p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
-                            <input type="text" class="form-control" name="indicaciones" placeholder="Indicaciones">
+                            <input type="text" class="form-control" name="indicaciones" placeholder="Indicaciones" value="{{old('indicaciones')}}">
                             <span class="text-danger">@error('indicaciones'){{$message}}@enderror</span>
                         </div>
                     </div>

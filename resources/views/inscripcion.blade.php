@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-row" style="margin-left: 1px; margin-top: 7px">
                         <div class="form-group col-md-6">
-                            <label class="custom-file-label" for="customFile">Manual</label>
+                            <label class="custom-file-label" for="customFile">Manual</label> <br>
                             <input type="file" class="custom-file-input" name="manual">
                             <span class="text-danger">@error('manual'){{$message}}@enderror</span>
                         </div>
@@ -61,103 +61,212 @@
             <div class="alert alert-success" role="alert" style="width: 60%; margin: auto; text-align: center; margin-top: 7px">{{Session::get('success')}}</div>
         @endif
         @if(Session::has('fail'))
-            <div class="alert alert-danger">{{Session::get('fail')}}</div>
+            <div class="alert alert-danger" style="width: 60%; margin: auto; text-align: center; margin-top: 7px">{{Session::get('fail')}}</div>
+        @endif
+        @if($errors->isEmpty()==False)
+            <div class="alert alert-danger" style="width: 60%; margin: auto; text-align: center; margin-top: 7px">Datos incorrectos </div>
         @endif
         <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left;background: var(--bs-secondary-bg);">
             <h2 class=".subject-section-heading" style="text-align: center;background: #cd171e;color: #faf8fb; padding: 5px"><strong>{{$asignatura->clave}} {{$asignatura->nombre}}</strong></h2>
             <div class="col-md-10 text-center mx-auto">
                 <h1>Práctica {{$practica->orden}}. {{$practica->nombre}}</h1>
-                <p style="text-align: left">{{$practica->indicaciones}} </p>
-                    <div style="display: flex; flex-direction: row; margin: 10px">
+                <div style="background-color: #bdbdbd; padding: 10px" class="indicaciones">
+                    <p style="text-align: left; margin:0px">{{$practica->indicaciones}} </p>
+                </div>
+
+                    <div style="display: flex; flex-direction: row; margin: 10px" class="inscriptionButtons">
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary btn-sm" style=" width: 230px"><a style=" text-decoration:none; color: white;" href={{ route('descargar', ['id_pdf' => $practica->manual]) }}> Descargar manual </a></button>
+                            <button type="button" class="btn btn-primary btn-sm inscriptionButton" style=" width: 230px"><a style=" text-decoration:none; color: white" href={{ route('descargar', ['id_asignatura' => explode('/',$practica->previo)[1], 'id_pdf' => explode('/',$practica->previo)[2]]) }}> Descargar cuestionario previo </a></button>
                         </div>
                         <div class="form-group col-md-6">
-                            <button type="button" class="btn btn-primary btn-sm" style=" width: 230px"><a style=" text-decoration:none; color: white" href={{ route('descargar', ['id_pdf' => $practica->previo]) }}> Descargar cuestionario previo </a></button>
+                            <button type="button" class="btn btn-primary btn-sm inscriptionButton" style=" width: 230px"><a style=" text-decoration:none; color: white;" href={{ route('descargar', ['id_asignatura' => explode('/',$practica->manual)[1], 'id_pdf' => explode('/',$practica->manual)[2]]) }}> Descargar manual </a></button>
                         </div>
                     </div>
                         @if(isset($administrador))
-                    <div style="display: flex; flex-direction: row; margin: 10px">
-                            <div class="form-group col-md-4">
+                    <div style="display: flex; flex-direction: row; margin: 10px" class="materiaColumna1">
+                            <div class="form-group col-md-4 botónMateria">
                                 <button type="button" class="btn btn-success btn-sm" style="width: 200px"> <a style=" text-decoration:none; color: white" href={{ route('calificaciones', ['id_calificaciones' => $practica->id]) }}> Archivo de calificaciones </a></button>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-4 botónMateria">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalCenter" style="width: 200px">Editar Práctica</button>
                             </div>
-                            <div class="form-group col-md-4">
-                                <form action="{{ route('deletePractice', ['id_practica' => $practica->id]) }}" method="post" style="display:flex; flex-direction: row">
+                            <div class="form-group col-md-4 botónMateria">
+                                <form action="{{ route('deletePractice', ['id_practica' => $practica->id]) }}" method="post" style="display:flex; flex-direction: row" class="formMateria">
                                     @csrf
-                                        <button type="submit" class="btn btn-info btn-sm" style="width: 200px">Eliminar Práctica</button>
+                                        <button type="submit" class="btn btn-dark btn-sm botonEl" style="width: 200px">Eliminar Práctica</button>
                                 </form>
                             </div>
                         @endif
                     </div>
                     @if(isset($administrador))
-                        <form method="post" action="{{route('addSession')}}">
-                            @csrf
-                            <div class="row" >
-                                <div class="form-group col-md-3"  style="margin-top: 30px">
-                                    <label>Nueva Sesión: &nbsp;</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-8">
-                                    <input type="datetime-local" class="form-control" id="datetime" name="datetime">
-                                    <span class="text-danger">@error('orden'){{$message}}@enderror</span>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <input type="hidden" id="practica_id" name="practica_id" value="{{$practica->id}}">
-                                    <button type="submit" class="btn btn-primary btn-sm"  style="margin: 7px; width: 170px" >Agregar Sesión</button>
-                                </div>
-                            </div>
-                        </form>
                         @foreach($sesiones as $sesion)
-                            <p style="display: none">{{$num=1}}</p>
-                            <h5 style="margin-top: 30px">Lista de asistencia </h5>
-                            <h5 style="margin-top: 7px">Fecha: {{$sesion->fechaDia[2]}}-{{$sesion->fechaDia[1]}}-{{$sesion->fechaDia[0]}} &nbsp; &nbsp; Hora: {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} hrs. </h5> <hr>
-                            <form method="post" action="{{ route('changeScore') }}" >
-                            @csrf
-                            <table class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Número de Cuenta</th>
-                                    <th scope="col">Apellidos</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Calificación</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                        @foreach ($alumnos as $alumno)
-                                            @if($alumno->sesion_id == $sesion->id)
-                                                <tr>
-                                                    <th scope="row">{{ $num++, $num}}</th>
-                                                    <td>{{$alumno->numeroCuenta}}</td>
-                                                    <td>{{$alumno->apellidos}}</td>
-                                                    <td>{{$alumno->nombre}}</td>
-                                                    <td>
-                                                        <div class="form-group" style="width: 40%; margin:auto">
-                                                            <input type="number" class="form-control" name="{{$alumno->id}}" placeholder="{{$alumno->calificacion}}" autocomplete="off">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
+                            <div class="blockPractica">
+                                <hr>
+                                <p style="display: none">{{$num=1}}</p>
+                                <h4 style="margin-top: 30px">Lista de asistencia </h4>
+                                <div style="display: flex; justify-content: center">
+                                    <p style="margin-right: 10px"><strong>Fecha:</strong> {{$sesion->fechaDia[2]}} de {{convertMonth($sesion->fechaDia[1])}}, {{$sesion->fechaDia[0]}}</p>
+                                    <p style="margin-left: 5px"><strong>Horario:</strong> {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} - {{$sesion->fechaHora[0]+$sesion->duracionExplode[0]}}:@if($sesion->fechaHora[1]+$sesion->duracionExplode[1]<10)0{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @else{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @endif hrs.</p>
+                                </div>
+                                <form method="post" action="{{route('modifySession')}}" style="margin: auto; width: 100%; margin-bottom: 30px">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="form-group col-md-5" style="text-align: start">
+                                            <label style="display: flex; flex-direction: row">&nbsp; Fecha y hora: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                            <input type="datetime-local" class="form-control" id="datetime" name="datetime" value="{{$sesion->fecha}}">
+                                            <span class="text-danger">@error('datetime'){{$message}}@enderror</span>
+                                        </div>
+                                        <div class="form-group col-md-4" style="text-align: start">
+                                            <label style="display: flex; flex-direction: row">&nbsp; Duración: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                            <input type="time" class="form-control" id="time" name="time" value="{{$sesion->duracion}}">
+                                            <span class="text-danger">@error('time'){{$message}}@enderror</span>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" id="practica_id" name="practica_id" value="{{$practica->id}}">
+                                            <input type="hidden" id="sesion_id" name="sesion_id" value="{{$sesion->id}}">
+                                            <button type="submit" class="btn btn-info btn-sm"  style="margin: 7px; width: 130px; position: relative" >Modificar<br>Sesión</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-2" style="text-align: start">
+                                            <label style="display: flex; flex-direction: row">&nbsp; Aula: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                            <input type="text" class="form-control" id="time" name="aula" value="{{$sesion->aula}}">
+                                            <span class="text-danger">@error('aula'){{$message}}@enderror</span>
+                                        </div>
+                                        <div class="form-group col-md-2" style="text-align: start">
+                                            <label style="display: flex; flex-direction: row">&nbsp; Cupo: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                            <input type="number" class="form-control" id="time" name="cupo" value="{{$sesion->cupo}}">
+                                            <span class="text-danger">@error('cupo'){{$message}}@enderror</span>
+                                        </div>
+                                        <div class="form-group col-md-5" style="text-align: start">
+                                            <label style="">&nbsp; Profesor: </label>
+                                            <input type="text" class="form-control" id="time" name="profesor" value="{{$sesion->profesor}}">
+                                            <span class="text-danger">@error('profesor'){{$message}}@enderror</span>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <a href="{{route('deleteSession', $sesion->id)}}" class="btn btn-dark btn-sm"  style="margin: 7px; width: 130px">Eliminar<br>Sesión</a>
+                                        </div>
+                                    </div>
+                                </form>
 
-                                </tbody>
-                            </table>
-                            <div class="form-group col-md-3" style="margin-left: auto; margin-right: auto">
-                                <button type="submit" class="btn btn-primary"  style="margin: 7px; width: 170px" >Guardar Cambios</button>
+
+
+                                <form method="post" action="{{ route('changeScore') }}" >
+                                @csrf
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Núm. de Cuenta</th>
+                                            <th scope="col">Apellidos</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Calificación</th>
+                                            <th scope="col">Dar de Baja</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($alumnos as $alumno)
+                                                @if($alumno->sesion_id == $sesion->id)
+                                                    <tr>
+                                                        <th scope="row">{{ $num++, $num}}</th>
+                                                        <td>{{$alumno->numeroCuenta}}</td>
+                                                        <td style="padding-left: 15px; padding-right: 15px; text-align: start">{{$alumno->apellidos}}</td>
+                                                        <td style="padding-left: 15px; padding-right: 15px; text-align: start">{{$alumno->nombre}}</td>
+                                                        <td>
+                                                            <div class="form-group" style="width: 50px; margin:auto">
+                                                                <input type="number" class="form-control" name="{{$alumno->id}}" value="{{$alumno->calificacion}}" autocomplete="off">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group col-md-3">
+                                                                <a href="{{route('deleteAlumn', $alumno->id)}}" class="btn btn-dark btn-sm"  style="margin: 7px; width: 70px">Eliminar</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="form-group col-md-3" style="margin-left: auto; margin-right: auto">
+                                        <button type="submit" class="btn btn-success"  style="margin: 7px; width: 170px" >Guardar Lista</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
                         @endforeach
+                        <div class="blockPractica">
+                            <hr>
+                            <h4 style="text-align: start">&nbsp;Añadir una nueva sesión</h4>
+                            <div style="display: flex; flex-direction: row; ">
+                                <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> <p style="font-size: small; color: #cd171e; margin: 0px">Campo obligatorio</p>
+                            </div>
+                            <form method="post" action="{{route('addSession')}}" style="margin: auto; width: 100%; margin-bottom: 30px">
+                                @csrf
+                                <div class="row">
+                                    <div class="form-group col-md-5" style="text-align: start">
+                                        <label style="display: flex; flex-direction: row">&nbsp; Fecha y hora: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                        <input type="datetime-local" class="form-control" id="datetime" name="datetime">
+                                        <span class="text-danger">@error('datetime'){{$message}}@enderror</span>
+                                    </div>
+                                    <div class="form-group col-md-4" style="text-align: start">
+                                        <label style="display: flex; flex-direction: row">&nbsp; Duración: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                        <input type="time" class="form-control" id="time" name="time" value="02:00">
+                                        <span class="text-danger">@error('time'){{$message}}@enderror</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-2" style="text-align: start">
+                                        <label style="display: flex; flex-direction: row">&nbsp; Aula:  <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                        <input type="text" class="form-control" id="time" name="aula">
+                                        <span class="text-danger">@error('aula'){{$message}}@enderror</span>
+                                    </div>
+                                    <div class="form-group col-md-2" style="text-align: start">
+                                        <label style="display: flex; flex-direction: row">&nbsp; Cupo:  <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
+                                        <input type="number" class="form-control" id="time" name="cupo" value="24">
+                                        <span class="text-danger">@error('cupo'){{$message}}@enderror</span>
+                                    </div>
+                                    <div class="form-group col-md-5" style="text-align: start">
+                                        <label style="">&nbsp; Profesor: </label>
+                                        <input type="text" class="form-control" id="time" name="profesor">
+                                        <span class="text-danger">@error('profesor'){{$message}}@enderror</span>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <input type="hidden" id="practica_id" name="practica_id" value="{{$practica->id}}">
+                                        <button type="submit" class="btn btn-success btn-sm botonGreen"  style="margin: 7px; width: 130px; position: relative; bottom: 25px" >Agregar<br>Sesión</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     @if(isset($administrador))
     @else
+        <div class="d-lg-flex justify-content-lg-center" style="text-align: center" >
+            <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left;background: var(--bs-secondary-bg);">
+                <div style="padding: 30px">
+                    <h1>Sesiones</h1> <hr>
+                            @foreach($sesiones as $sesion)
+                                <div style="background-color: #FAF8FB; padding: 20px 20px 15px 20px; margin: 10px 50px 10px 50px" class="SesionWhite">
+                                    <h5><strong>Sesión {{ $num++, $num}}</strong></h5>
+                                    <div style="margin: 0px 10px; display: flex; flex-wrap: wrap; flex-direction: column; margin: 1px">
+                                        <div style="display: flex; flex-direction: row; justify-content: start; margin: 0px" class="sesionContainer">
+                                            <p class="sesionP"><strong>Fecha:</strong> {{$sesion->fechaDia[2]}}-{{$sesion->fechaDia[1]}}-{{$sesion->fechaDia[0]}}</p>
+                                            <p class="sesionP"><strong>Horario:</strong> {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} - {{$sesion->fechaHora[0]+$sesion->duracionExplode[0]}}:@if($sesion->fechaHora[1]+$sesion->duracionExplode[1]<10)0{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @else{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @endif hrs.</p>
+                                            <p class="sesionP"><strong>Salón:</strong> {{$sesion->aula}}</p>
+                                        </div>
+                                        <div style="display: flex; flex-direction: row; justify-content: start; margin: 0px" class="sesionContainer">
+                                            <p class="sesionP"><strong>Vacantes: </strong>{{$sesion->cupo - $sesion->vacantes}} de {{$sesion->cupo}}@if($sesion->vacantes<10)&nbsp;@endif</p>
+                                            @if($sesion->profesor)<p class="sesionP"><strong>Profesor:</strong> {{$sesion->profesor}}</p>@endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                </div>
+            </div>
+        </div>
+
         <div class="d-lg-flex justify-content-lg-center" style="text-align: center" >
             <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left;background: var(--bs-secondary-bg);">
                 <div>
@@ -170,49 +279,52 @@
                         @endif
                         @csrf
                         <h1>Inscribirme</h1> <hr>
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label>N° de Práctica</label>
-                                <input type="number" class="form-control" name="orden" placeholder="{{$practica->orden}}" value="{{$practica->orden}}" readonly disabled>
-                            </div>
-                            <div class="form-group col-md-9">
-                                <label>Nombre de la Practica</label>
-                                <select name="practica_id" id="practica_id" class="form-control" readonly disabled>
-                                    <option value="{{$practica->id}}" readonly>{{$practica->nombre}}</option>
-                                </select>
-                            </div>
+                        <div style="display: flex; flex-direction: row; ">
+                            <p style="font-size: large; color: #cd171e; margin: 0px;">* &nbsp;</p> <p style="font-size: small; color: #cd171e; margin: 0px">Campo obligatorio</p>
                         </div>
                         <div class="row" style="margin-top: 7px">
-                            <div class="form-group col-md-6">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" name="nombre" placeholder="Nombre" autocomplete="off">
+                            <div class="form-group col-md-4">
+                                <label  style="display:flex; flex-direction: row">Nombre  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                                <input type="text" class="form-control" name="nombre" placeholder="Nombre" autocomplete="off" value="{{old('nombre')}}">
                                 <span class="text-danger">@error('nombre'){{$message}}@enderror</span>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Apellidos</label>
-                                <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" autocomplete="off">
+                            <div class="form-group col-md-4">
+                                <label style="display:flex; flex-direction: row">Apellidos  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                                <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" autocomplete="off" value="{{old('apellidos')}}">
                                 <span class="text-danger">@error('apellidos'){{$message}}@enderror</span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label style="display:flex; flex-direction: row">Correo Electrónico  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                                <input type="text" class="form-control" name="correo" placeholder="ejemplo@correo.com" autocomplete="off" value="{{old('correo')}}">
+                                <span class="text-danger">@error('correo'){{$message}}@enderror</span>
                             </div>
                         </div>
                         <div class="row" style="margin-top: 7px">
                             <div class="form-group col-md-3">
-                                <label>Número de cuenta</label>
-                                <input type="number" class="form-control" name="cuenta" placeholder="#########" autocomplete="off">
+                                <label style="display:flex; flex-direction: row">Número de Cuenta  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                                <input type="number" class="form-control" name="cuenta" placeholder="#########" autocomplete="off" value="{{old('cuenta')}}">
                                 <span class="text-danger">@error('cuenta'){{$message}}@enderror</span>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label>Grupo Teórico</label>
-                                <input type="number" class="form-control" name="grupo" placeholder="#" autocomplete="off">
+                            <div class="form-group col-md-2">
+                                <label style="display:flex; flex-direction: row">Grupo Teórico  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
+                                <input type="number" class="form-control" name="grupo" placeholder="#" autocomplete="off" value="{{old('grupo')}}">
                                 <span class="text-danger">@error('grupo'){{$message}}@enderror</span>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Sesión</label>
+                            <div class="form-group col-md-7">
+                                <label style="display:flex; flex-direction: row">Sesion  &nbsp;<p style="font-size: large; color: #cd171e; margin: 0px;">*</p> </label>
                                 <select name="sesion" class="form-select">
+                                    <option hidden selected> </option>
                                     @foreach($sesiones as $sesion)
-                                        <option value={{$sesion->id}}> Fecha: {{$sesion->fechaDia[2]}}-{{$sesion->fechaDia[1]}}-{{$sesion->fechaDia[0]}} &nbsp; &nbsp; &nbsp; Hora: {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} hrs. </option>
+                                        @if($sesion->vacantes < $sesion->cupo)
+                                            <option value={{$sesion->id}} >{{ $otroNum++, $otroNum}}. Fecha: {{$sesion->fechaDia[2]}}-{{$sesion->fechaDia[1]}}-{{$sesion->fechaDia[0]}} &nbsp; Horario: {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} - {{$sesion->fechaHora[0]+$sesion->duracionExplode[0]}}:@if($sesion->fechaHora[1]+$sesion->duracionExplode[1]<10)0{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @else{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @endif hrs. </option>
+                                        @else
+                                            <option value={{$sesion->id}} disabled>{{ $otroNum++, $otroNum}}. Fecha: {{$sesion->fechaDia[2]}}-{{$sesion->fechaDia[1]}}-{{$sesion->fechaDia[0]}} &nbsp; Horario: {{$sesion->fechaHora[0]}}:{{$sesion->fechaHora[1]}} - {{$sesion->fechaHora[0]+$sesion->duracionExplode[0]}}:@if($sesion->fechaHora[1]+$sesion->duracionExplode[1]<10)0{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @else{{$sesion->fechaHora[1]+$sesion->duracionExplode[1]}} @endif hrs. </option>
+                                        @endif
                                     @endforeach
                                 </select>
+                                <span class="text-danger">@error('sesion'){{$message}}@enderror</span>
                             </div>
+                            <input type="hidden" name="orden" value="{{$practica->orden}}">
                             <input type="hidden" name="practica_id" value="{{$practica->id}}">
                         </div>
                         <button type="submit" class="btn btn-primary" style="margin-top: 7px">Enviar</button>

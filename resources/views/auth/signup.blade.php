@@ -1,10 +1,54 @@
 @extends('layout.app')
 @section('content')
+    @if(Session::has('success'))
+        <div class="alert alert-success" role="alert" style="width: 60%; margin: auto; text-align: center; margin-top: 7px">{{Session::get('success')}}</div>
+    @endif
+    @if(isset($administradores))
+            <div style="background-color: #FAF8FB; padding: 20px 20px 15px 20px; margin: 10px 50px 10px 50px" class="SesionWhite">
+                <h5><strong>Lista de Administradores</strong></h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($administradores as $admin)
+                    <tr>
+                        <td>{{$admin->usuario}}</td>
+                        <td>{{$admin->nombre}}</td>
+                        <td>{{$admin->apellidos}}</td>
+                        <td style="width: 350px;">
+                            <div style="display: flex; justify-content: space-around">
+                            <form method="get" action="{{route('modifyAdministrator', $admin->id)}}">
+                                @csrf
+                                <button type="submit" class="btn btn-warning btn-sm" style="width: 150px;  margin: auto">Modificar Datos</button>
+                                <input type="hidden" name="id" value="{{$admin->id}}">
+                            </form>
+                            @if($count>1)
+                                <form method="post" action="{{route('destructionAdministrator')}}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{$admin->id}}">
+                                    <button type="submit" class="btn btn-dark btn-sm" style="width: 150px;  margin: auto">Eliminar registro</button>
+                                </form>
+                            @endif
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+    @endif
     <section class="position-relative py-4 py-xl-5">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-8 col-xl-6 text-center mx-auto">
-                    <h2>Registro de Administrador</h2>
+                    <h2>Registro de Nuevo Administrador</h2>
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
@@ -27,6 +71,7 @@
                                 <div class="mb-3"><input class="form-control" type="text" name="apellidos" placeholder="Apellidos" value="{{old('apellidos')}}" autocomplete="off"><span class="text-danger">@error('apellidos'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena"  placeholder="Contraseña" ><span class="text-danger">@error('contrasena'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena_confirmation"  placeholder="Confirme contraseña" ><span class="text-danger">@error('contrasena_confirmation'){{$message}}@enderror</span></div>
+                                <div class="mb-3"><p style="font-size: 16px">La contraseña debe tener una longitud de 6 a 20 caracteres e incluir caracteres y números.</p></div>
                                 <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" style="background: #cd171e;">Registrar</button></div>
                             </form>
                         </div>

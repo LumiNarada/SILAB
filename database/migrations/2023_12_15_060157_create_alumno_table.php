@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellidos');
             $table->string('grupo');
+            $table->string('correo');
             $table->unsignedBigInteger('sesion_id');
             $table->smallInteger('calificacion')->default(0);
             $table->foreign('sesion_id')->references('id')->on('sesion')->onDelete('cascade');

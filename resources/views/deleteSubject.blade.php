@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('content')
-    <div class="alert alert-danger" role="alert" style="width: 60%; margin: auto; text-align: center">Acción Destructiva, ¿Desea continuar?</div>
+    <div class="alert alert-danger" role="alert" style="width: 60%; margin: auto; text-align: center"> <b> Acción destructiva </b> <br> Eliminará la asignatura "{{ $asignatura->nombre }}" junto con {{ $practicas }} práctica(s). <br> ¿Desea continuar?</div>
     <div style="text-align: center; display:flex; justify-content: center !important; ">
         <div class="row">
             <div class="col-6" style="margin: auto">
