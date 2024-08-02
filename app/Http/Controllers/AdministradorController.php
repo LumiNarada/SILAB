@@ -22,6 +22,8 @@ class AdministradorController extends Controller
         ],[
             'clave.required' => 'El campo \'Clave\' es requerido',
             'nombre.required' => 'El campo \'Nombre\' es requerido',
+            'clave.unique' => 'La clave ya está registrada',
+            'nombre.unique' => 'El nombre ya está registrado',
         ]);
         $asignatura = new asignatura();
         $asignatura->clave = $request->clave;
@@ -31,21 +33,30 @@ class AdministradorController extends Controller
         $asignaturas = Asignatura::all();
         $practicas = Practica::all()->sortBy('orden');
         if($res){
-            return view('muro')->with('success', 'Asignatura agregada correctamente')->with('administrador', $administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
+            return back()->with('success', 'Asignatura agregada correctamente')->with('administrador', $administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
         } else {
-            return view('muro')->with('fail', 'Error al agregar asignatura. Inténtalo más tarde.')-with($administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
+            return back()->with('fail', 'Error al agregar asignatura. Inténtalo más tarde.')-with($administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
         }
     }
     public function modifySubject(Request $request){
-        $request->validate([
-            'id' => 'required',
-            'clave' => 'required',
-            'nombre' => 'required',
-        ],[
-            'clave.required' => 'El campo \'Clave\' es requerido',
-            'nombre.required' => 'El campo \'Nombre\' es requerido',
-        ]);
         $asignatura = Asignatura::find($request->id);
+        if($asignatura->clave != $request->clave){
+            $request->validate([
+                'clave' => 'required|unique:asignatura',
+            ],[
+                'clave.required' => 'El campo \'Clave\' es requerido',
+                'clave.unique' => 'La clave ya está registrada',
+            ]);
+        }
+
+        if($asignatura->nombre != $request->nombre){
+            $request->validate([
+                'nombre' => 'required|unique:asignatura',
+            ],[
+                'nombre.required' => 'El campo \'Nombre\' es requerido',
+                'nombre.unique' => 'El nombre ya está registrado',
+            ]);
+        }
         $asignatura->clave = $request->clave;
         $asignatura->nombre = $request->nombre;
         $res = $asignatura->save();
@@ -55,9 +66,9 @@ class AdministradorController extends Controller
         $asignaturas = Asignatura::all();
         $practicas = Practica::all()->sortBy('orden');
         if($res){
-            return view('muro')->with('success', 'Asignatura modificada correctamente')->with('administrador', $administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
+            return back()->with('success', 'Asignatura modificada correctamente')->with('administrador', $administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
         } else {
-            return back()->with('fail', 'Error al modificar asignatura.')-with($administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
+            return back()->with('fail', 'Error al modificar asignatura.')->with('administrador', $administrador)->with('asignaturas',$asignaturas)->with('practicas',$practicas);
         }
     }
     public function addPractice(Request $request){
@@ -270,8 +281,9 @@ class AdministradorController extends Controller
     public function modifyAdministrator(Request $request)
     {
         $admin = Administrador::find($request->id);
+        $administrador = Administrador::where('id', '=', Session::get('loginId'))->first();
         if (!$admin){return back();}
-        return view('modifyAdmin')-> with('admin', $admin);
+        return view('modifyAdmin')-> with('admin', $admin)-> with('administrador', $administrador);
     }
     public function destructionAdministrator(Request $request)
     {

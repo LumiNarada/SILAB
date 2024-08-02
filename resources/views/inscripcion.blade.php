@@ -15,8 +15,8 @@
                         <div class="form-group col-md-8">
                             <label for="inputPassword4">Asignatura</label>
                             <select name="asignatura" id="asignatura" class="form-control">
-                                @foreach($asignaturas as $asignatura)
-                                    <option value="{{$asignatura->id}}" @if ($practica->asignatura_id == $asignatura->id) selected @endif  >{{$asignatura->nombre}}</option>
+                                @foreach($asignaturas as $asign)
+                                    <option value="{{$asign->id}}" @if ($practica->asignatura_id == $asign->id) selected @endif > {{$asignatura->nombre}} </option>
                                 @endforeach
                             </select>
                             <span class="text-danger">@error('asignatura'){{$message}}@enderror</span>
@@ -67,7 +67,7 @@
             <div class="alert alert-danger" style="width: 60%; margin: auto; text-align: center; margin-top: 7px">Datos incorrectos </div>
         @endif
         <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left;background: var(--bs-secondary-bg);">
-            <h2 class=".subject-section-heading" style="text-align: center;background: #cd171e;color: #faf8fb; padding: 5px"><strong>{{$asignatura->clave}} {{$asignatura->nombre}}</strong></h2>
+            <h2 class=".subject-section-heading" style="text-align: center;background: #cd171e;color: #faf8fb; padding: 5px"><strong>{{$asignatura->clave}} {{$asignatura->nombre}} </strong></h2>
             <div class="col-md-10 text-center mx-auto">
                 <h1>Práctica {{$practica->orden}}. {{$practica->nombre}}</h1>
                 <div style="background-color: #bdbdbd; padding: 10px" class="indicaciones">

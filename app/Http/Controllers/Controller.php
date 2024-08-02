@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 // use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use App\Models\Administrador;
 use App\Models\Asignatura;
 use App\Models\Alumno;
@@ -32,17 +33,12 @@ class Controller extends BaseController
         return view('muro')->with('asignaturas',$asignaturas)->with('practicas', $practicas);
     }
 
-    public function inscripcion(Request $request){
-        $user = $request->session()->get('loginId');
-        return view('inscripcion', compact('user'));
-    }
-
     public function practica(Request $request, $id_practica){
         $asignaturas = Asignatura::all();
         $administrador = Administrador::where('id', '=', Session::get('loginId'))->first();
         $practica=Practica::where('id', '=', $id_practica)->first();
         if ($practica == NULL) { return redirect('/'); }
-        $asignatura=Asignatura::where('id', '=', $practica->asignatura_id)->first();
+        $asignatura=Asignatura::find($practica->asignatura_id);
         $alumnos = Alumno::all();
         $sesiones=Sesion::where('practica_id', '=', $id_practica)->orderBy('fecha')->get();
         foreach ($sesiones as $sesion){
@@ -96,7 +92,7 @@ class Controller extends BaseController
         if($res){
             $sesion->vacantes += 1;
             $sesion->save();
-            return back()->with('success', 'Inscripción realizada correctamente. Sigue las indicaciones y preséntate el día de la sesión de laboratiorio. Enviaremos un correo electórnico para recordarte esta información un día antes de la clase.');
+            return back()->with('success', 'Inscripción realizada correctamente. Sigue las indicaciones y preséntate el día de la sesión de laboratiorio. Si es necesario, enviaremos un correo electórnico para recordarte esta información antes de la clase.');
         } else {
             return back()->with('fail', 'Error en proceso de inscripción. Inténtalo más tarde.');
         }
@@ -119,7 +115,6 @@ class Controller extends BaseController
         $asignatura=Asignatura::where('id', '=', $practica->asignatura_id)->first();
         $date = date('Y-m-d');
         $pdf = Pdf::loadView('calificaciones', compact('alumnos', 'practica', 'asignatura', 'date', 'sesiones'))->setPaper('A4');
-
         return $pdf->stream();
     }
 

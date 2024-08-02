@@ -71,7 +71,7 @@
                                 <div class="mb-3"><input class="form-control" type="text" name="apellidos" placeholder="Apellidos" value="{{old('apellidos')}}" autocomplete="off"><span class="text-danger">@error('apellidos'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena"  placeholder="Contraseña" ><span class="text-danger">@error('contrasena'){{$message}}@enderror</span></div>
                                 <div class="mb-3"><input class="form-control" type="password" name="contrasena_confirmation"  placeholder="Confirme contraseña" ><span class="text-danger">@error('contrasena_confirmation'){{$message}}@enderror</span></div>
-                                <div class="mb-3"><p style="font-size: 16px">La contraseña debe tener una longitud de 6 a 20 caracteres e incluir caracteres y números.</p></div>
+                                <div class="mb-3"><p style="font-size: 16px">Todos los campos son obligatorios. <br> La contraseña debe tener una longitud de 6 a 20 caracteres e incluir caracteres y números.</p></div>
                                 <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" style="background: #cd171e;">Registrar</button></div>
                             </form>
                         </div>

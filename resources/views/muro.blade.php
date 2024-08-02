@@ -5,8 +5,8 @@
         <div class="container border-3 border-primary focus-ring subject-section" style="margin: 10px;padding: 0px;color: rgb(33, 37, 41);text-align: left; display: flex; flex-direction: column; justify-content: center">
             <strong style="font-size: 35px; margin: auto" >{{ __('Lista de Asignaturas') }}</strong>
             @if(isset($administrador))
-            <button type="button" class="btn btn-info btn-lg btn-block " data-toggle="modal" data-target="#exampleModalCenter" style="width: 100%; margin-bottom: 10px">Agregar Asignatura</button>
-            <a href="{{route('createPractice')}}" style="margin: 5px"> <button type="button" class="btn btn-info btn-lg btn-block "  style="width: 100%">Agregar Práctica</button> </a></a>
+            <button type="button" class="btn btn-info btn-lg btn-block " data-toggle="modal" data-target="#exampleModalCenter" style="width: 99%; margin:auto; margin-bottom: 10px">Agregar Asignatura</button>
+            <a href="{{route('createPractice')}}" style="margin: 5px"> <button type="button" class="btn btn-info btn-lg btn-block "  style="width: 100%">Agregar Práctica</button> </a>
             @endif
             @error('clave')<div class="subject-section-p"> <div class="alert alert-danger">{{$message}}</div></div>@enderror
             @error('nombre')<div class="subject-section-p"> <div class="alert alert-danger">{{$message}}</div></div>@enderror
@@ -44,8 +44,8 @@
             </div>
         </div>
     </div>
-    @if(isset($success))
-        <div class="alert alert-success" role="alert" style="width: 60%; margin: auto; text-align: center">{{$success}}</div>
+    @if(session()->has('success'))
+        <div class="alert alert-success" role="alert" style="width: 60%; margin: auto; text-align: center">{{ session()->get('success') }}</div>
     @endif
     @if(isset($fail))
         <div class="alert alert-danger" role="alert" style="width: 60%; margin: auto; text-align: center">{{$fail}}</div>
