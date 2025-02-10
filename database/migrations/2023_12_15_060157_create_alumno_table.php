@@ -16,10 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('numeroCuenta');
             $table->string('nombre');
             $table->string('apellidos');
-            $table->string('grupo');
-            $table->string('correo');
+            $table->unsignedTinyInteger('grupo');
+            $table->smallInteger('calificacionPrevio')->default(0);
+            $table->smallInteger('calificacionPractica')->default(0);
+            $table->unsignedBigInteger('carrera_id');
             $table->unsignedBigInteger('sesion_id');
-            $table->smallInteger('calificacion')->default(0);
+            $table->foreign('carrera_id')->references('id')->on('carrera')->onDelete('cascade');
             $table->foreign('sesion_id')->references('id')->on('sesion')->onDelete('cascade');
             $table->timestamps();
         });

@@ -24,7 +24,7 @@
                             @endif
                             @csrf
                             <div class="mb-3"><input class="form-control" type="text" name="usuario" placeholder="Usuario" value="{{old('usuario')}}" autocomplete="off"></div>
-                            <div class="mb-3"><input class="form-control" type="password" name="contrasena"  placeholder="Contraseña"></div>
+                            <div class="mb-3"><input class="form-control" type="password" name="contrasena"  placeholder="Contraseña" value="{{old('cuenta')}}"></div>
                             <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" style="background: #cd171e;">Acceder</button></div>
                         </form>
                     </div>

@@ -1,7 +1,7 @@
 <?php
 function convertMonth($month){
     switch ($month) {
-        case 0:
+        case 1:
             return "enero";
         case 2:
             return "febrero";

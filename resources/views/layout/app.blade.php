@@ -45,7 +45,7 @@
 @else
     <nav class="navbar navbar-expand-lg sticky-top bg-body" id="navbar-complete" style="background: #cd171e;">
         <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong id="silabnavbar">{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Sistema De Inscripción Para Prácticas <br> Optativas De Los Laboratorios De <br> La División De Ciencias Básicas.</p>
+            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Sistema de inscripción para prácticas optativas de las asignaturas de Matemáticas y de Ciencias Aplicadas <br> de la División de Ciencias Básicas de la Facultad de Ingeniería de la UNAM.</p>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav d-lg-flex ms-auto justify-content-lg-center">
                     <li class="nav-item"><a class="nav-link" href="https://dcb.ingenieria.unam.mx" style="color: #faf8fb; margin-left: 5px; margin-right: 5px">División de Ciencias Básicas</a></li>
@@ -63,20 +63,26 @@
     <div class="container">
         <div class="row row-cols-2 row-cols-lg-2">
             <div class="col">
-                <p class="text-muted my-2" id="last-p">Todos los derechos reservados © 2024 / <a href="https://www.ingenieria.unam.mx/" style="color: rgb(250, 248, 251); text-decoration: none"> Facultad de Ingeniería </a> / <a href="https://www.unam.mx/" style="color: rgb(250, 248, 251); text-decoration: none"> UNAM </a> </p>
-            </div>
-
-            <div class="col">
                 <ul class="list-inline my-2">
                     <li class="list-inline-item">Universidad Nacional Autónoma de México</li>
-                    <li class="list-inline-item" style="font-size: x-small">Facultad de Ingeniería, Av. Universidad 3000, Ciudad Universitaria, Coyoacán, CDMX. CP. 04510</li>
+                </ul>
+                <ul class="list-inline my-2">
+                    <li class="list-inline-item" style="font-size: small">Facultad de Ingeniería, Av. Universidad 3000, Ciudad Universitaria, Coyoacán, CDMX. CP. 04510</li>
+                </ul>
+            </div>
+            <div class="col">
+                <ul class="list-inline my-2">
+                    <li class="list-inline-item"> Todos los derechos reservados © 2024 - {{$year}} </li>
+                </ul>
+                <ul class="list-inline my-2">
+                    <li class="list-inline-item" style="font-size: small">  <a href="https://www.ingenieria.unam.mx/" style="color: rgb(250, 248, 251); text-decoration: none"> Facultad de Ingeniería </a> / <a href="https://www.unam.mx/" style="color: rgb(250, 248, 251); text-decoration: none"> UNAM </a> </li>
                 </ul>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <ul class="list-inline my-2">
-                    <li class="list-inline-item" style="font-size: xx-small">Este es el sitio web del Sistema De Inscripción Para Laboratorios De La Coordinación de Matemáticas de la División De Ciencias Básicas de la Facultad de Ingeniería de la UNAM. Puede ser reproducido con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica. La elaboración de este sitio web fue llevada a cabo por Damián Magaña Raúl de Jesús y Alfaro Domínguez Arturo.</li>
+                    <li class="list-inline-item" style="font-size: xx-small">Este es el sitio web del Sistema de inscripción para prácticas optativas de asignaturas de Matemáticas y de Ciencias Aplicadas de la División de Ciencias Básicas de la Facultad de Ingeniería de la UNAM. Puede ser reproducido con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica. La elaboración de este sitio web fue llevada a cabo por Damián Magaña Raúl de Jesús y Alfaro Domínguez Arturo.</li>
                 </ul>
             </div>
         </div>

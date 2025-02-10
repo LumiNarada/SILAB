@@ -15,6 +15,7 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
+        // Si el usuario no está autenticado e intentar entrar a una página de autenticación, redirigir al inicio de sesión
         if(!Session()->has('loginId')){
             return redirect('login')->with('fail', 'Necesitas iniciar sesión para acceder a esa página');
         }

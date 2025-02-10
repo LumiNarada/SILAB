@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Administrador;
 use App\Models\Asignatura;
 use App\Models\Alumno;
+use App\Models\Carrera;
 use App\Models\Practica;
 use App\Models\Sesion;
 use Illuminate\Http\Request;
@@ -23,6 +24,15 @@ use Illuminate\Support\Facades\DB;
 
 class Controller extends BaseController
 {
+    protected $user;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = $request->user();
+            view()->share('user', $this->user);
+            return $next($request);
+        });
+    }
     public function muro(){
         $asignaturas = Asignatura::all();
         $practicas = Practica::all()->sortBy('orden');
@@ -40,6 +50,7 @@ class Controller extends BaseController
         if ($practica == NULL) { return redirect('/'); }
         $asignatura=Asignatura::find($practica->asignatura_id);
         $alumnos = Alumno::all();
+        $carreras = Carrera::all();
         $sesiones=Sesion::where('practica_id', '=', $id_practica)->orderBy('fecha')->get();
         foreach ($sesiones as $sesion){
             $sesion->fechaExplode= explode(' ' ,$sesion->fecha);
@@ -49,26 +60,32 @@ class Controller extends BaseController
         }
         $num=1;
         $otroNum=1;
-        return view('inscripcion')->with('practica',$practica)->with('administrador', $administrador)->with('alumnos', $alumnos)->with('otroNum', $otroNum)->with('num', $otroNum)->with('asignatura', $asignatura)->with('asignaturas', $asignaturas)->with('sesiones', $sesiones);
+        $myTime = date('Y-m-d').'T12:00';
+        return view('inscripcion')->with('practica',$practica)->with('administrador', $administrador)->with('alumnos', $alumnos)->with('otroNum', $otroNum)->with('num', $otroNum)->with('asignatura', $asignatura)->with('asignaturas', $asignaturas)->with('sesiones', $sesiones)->with('carreras',$carreras)->with('myTime',$myTime);
     }
 
     public function storageAlumno(Request $request){
         $request->validate([
             'practica_id' => 'required',
-            'nombre' => 'required',
-            'apellidos' => 'required',
-            'cuenta' => 'required',
+            'nombre' => 'required|string|min:2|max:100',
+            'apellidos' => 'required|string|min:2|max:100',
+            'cuenta' => 'required|regex:/^\d{9}$/',
             'sesion' => 'required',
-            'grupo' => 'required',
-            'correo'=>['required','regex:/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/']
+            'carrera' => 'required',
+            'grupo' => 'required|integer|min:0|max:255',
+            'aviso' => 'required|in:1',
         ],[
             'nombre.required' => 'El campo \'Nombre\' es requerido',
             'apellidos.required' => 'El campo \'Apellidos\' es requerido',
             'cuenta.required' => 'El campo \'Número de Cuenta\' es requerido',
+            'cuenta.regex' => 'El número de cuenta debe ser exactamente 9 dígitos numéricos, sin caracteres adicionales.',
             'sesion.required' => 'El campo \'Sesion\' es requerido',
+            'carrera.required' => 'El campo \'Carrera\' es requerido',
             'grupo.required' => 'El campo \'Grupo\' es requerido',
-            'correo.required' => 'El campo \'Correo Electrónico\' es requerido',
-            'correo.regex' => "El correo electrónico ingresado no es válido"
+            'grupo.integer' => 'El grupo no existe',
+            'grupo.min' => 'El grupo no existe',
+            'grupo.max' => 'El grupo no existe',
+            'aviso.required' => 'Debe aceptar el aviso de privacidad',
         ]);
         $alumno = new Alumno();
         $alumno->nombre = $request->nombre;
@@ -76,15 +93,15 @@ class Controller extends BaseController
         $alumno->grupo = $request->grupo;
         $alumno->sesion_id = $request->sesion;
         $alumno->numeroCuenta = $request->cuenta;
-        $alumno->correo = $request->correo;
+        $alumno->carrera_id = $request->carrera;
 
         $asignaturas = Asignatura::all();
         $practicas = Practica::all()->sortBy('orden');
         $sesion = Sesion::find($alumno->sesion_id);
         $practica = Practica::find($sesion->practica_id);
-        $inscritos = DB::table('alumno')->join('sesion', 'sesion_id', '=', 'sesion_id')->join('practica', 'practica_id', '=', 'practica_id')->where('practica_id', '=', $practica->id)->get();
+        $inscritos = DB::table('alumno')->join('sesion', 'sesion.id', '=', 'alumno.sesion_id')->join('practica', 'practica.id', '=', 'sesion.practica_id')->where('practica_id', '=', $practica->id)->get();
         foreach ($inscritos as $inscrito){
-            if($inscrito->numeroCuenta == $alumno->numeroCuenta){
+            if($inscrito->numeroCuenta == $alumno->numeroCuenta ){
                 return back()->with('fail', 'El alumno asociado a ese número de cuenta ya se ha inscrito a esta práctica.');
             }
         }
@@ -92,18 +109,29 @@ class Controller extends BaseController
         if($res){
             $sesion->vacantes += 1;
             $sesion->save();
-            return back()->with('success', 'Inscripción realizada correctamente. Sigue las indicaciones y preséntate el día de la sesión de laboratiorio. Si es necesario, enviaremos un correo electórnico para recordarte esta información antes de la clase.');
+            return back()->with('success', 'Inscripción realizada correctamente. Sigue las indicaciones y preséntate el día de la sesión de la práctica.');
         } else {
             return back()->with('fail', 'Error en proceso de inscripción. Inténtalo más tarde.');
         }
     }
     public function changeScore(Request $request){
         foreach ($request->except('_token') as $id_alumno => $calificacion){
-            if ($calificacion != NULL){
-                $alumno = Alumno::find($id_alumno);
-                $alumno->calificacion = $calificacion;
+            return $id_alumno;
+            $id_alumno = explode('_', $id_alumno);
+            if ($id_alumno[0] = 'previo' && $calificacion != NULL){
+                $alumno = Alumno::find($id_alumno[1]);
+                $alumno->calificacionPrevio = $calificacion;
                 $alumno->save();
             }
+            elseif ($id_alumno[0] = 'practica' && $calificacion != NULL){
+
+                $alumno = Alumno::find($id_alumno[1]);
+
+                $alumno->calificacionPractica = $calificacion;
+                return $calificacion;
+                $alumno->save();
+            }
+
         }
         return back();
     }
