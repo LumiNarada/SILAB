@@ -117,7 +117,7 @@
                                     </div>
                                     <div class="form-group col-md-4" style="text-align: start">
                                         <label style="display: flex; flex-direction: row">&nbsp; Duración: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
-                                        <input type="time" class="form-control" id="time" name="time" value="02:00">
+                                        <input type="time" step="60" class="form-control" id="time" name="time" value="02:00">
                                         <span class="text-danger">@error('time'){{$message}}@enderror</span>
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="form-group col-md-4" style="text-align: start">
                                             <label style="display: flex; flex-direction: row">&nbsp; Duración: <p style="font-size: large; color: #cd171e; margin: 0px;">&nbsp; * &nbsp;</p> </label>
-                                            <input type="time" class="form-control" id="time" name="time" value="{{$sesion->duracion}}">
+                                            <input type="time" step="60" class="form-control" id="time" name="time" value="{{$sesion->duracion}}">
                                             <span class="text-danger">@error('time'){{$message}}@enderror</span>
                                         </div>
                                         <div class="form-group col-md-3">
