@@ -115,20 +115,17 @@ class Controller extends BaseController
         }
     }
     public function changeScore(Request $request){
+
         foreach ($request->except('_token') as $id_alumno => $calificacion){
-            return $id_alumno;
             $id_alumno = explode('_', $id_alumno);
-            if ($id_alumno[0] = 'previo' && $calificacion != NULL){
+            if ($id_alumno[0] == 'previo' && $calificacion != NULL){
                 $alumno = Alumno::find($id_alumno[1]);
                 $alumno->calificacionPrevio = $calificacion;
                 $alumno->save();
             }
-            elseif ($id_alumno[0] = 'practica' && $calificacion != NULL){
-
+            elseif ($id_alumno[0] == 'practica' && $calificacion != NULL){
                 $alumno = Alumno::find($id_alumno[1]);
-
                 $alumno->calificacionPractica = $calificacion;
-                return $calificacion;
                 $alumno->save();
             }
 
@@ -138,11 +135,22 @@ class Controller extends BaseController
 
     public function calificaciones(Request $request, $id_calificaciones){
         $practica=Practica::where('id', '=', $id_calificaciones)->first();
-        $sesiones=Sesion::all();
+        $sesiones= Sesion::where('practica_id', '=', $id_calificaciones)
+            ->with('alumnos') // Carga los alumnos relacionados con cada sesión
+            ->orderby('fecha')
+            ->get();
+        $ultimaSesion = $sesiones->last();
+        foreach ($sesiones as $sesion){
+            $sesion->fechaExplode= explode(' ' ,$sesion->fecha);
+            $sesion->fechaDia = explode('-' ,$sesion->fechaExplode[0]);
+            $sesion->fechaHora = explode(':' ,$sesion->fechaExplode[1]);
+            $sesion->duracionExplode = explode(':' ,$sesion->duracion);
+        }
         $alumnos = Alumno::orderBy('grupo')->get();
         $asignatura=Asignatura::where('id', '=', $practica->asignatura_id)->first();
         $date = date('Y-m-d');
-        $pdf = Pdf::loadView('calificaciones', compact('alumnos', 'practica', 'asignatura', 'date', 'sesiones'))->setPaper('A4');
+        $num=1;
+        $pdf = Pdf::loadView('calificaciones', compact('alumnos', 'practica', 'asignatura', 'date', 'sesiones','ultimaSesion','num'))->setPaper('A4');
         return $pdf->stream();
     }
 
