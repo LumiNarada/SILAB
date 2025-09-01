@@ -23,29 +23,29 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/checkLogIn', 'checkLogIn')->name('checkLogIn');
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/prueba', 'prueba')->name('prueba');
-    Route::get('/registration', 'muro')->name('registrationGet');
+	Route::get('/registration', 'muro')->name('registrationGet');
     Route::get('/checkLogIn', 'muro')->name('checkLogInGet');
 });
 Route::controller(AdministradorController::class)->group(function(){
-    Route::get('/createPractice', 'createPractice')->name('createPractice')->middleware('AuthCheck');
-    Route::get('/modifyAdministrator/{id_practica}', 'modifyAdministrator')->name('modifyAdministrator')->middleware('AuthCheck');
-    Route::get('/deleteSession/{id_sesion}', 'deleteSession')->name('deleteSession')->middleware('AuthCheck');
-    Route::get('/deleteAlumn/{id_alumno}', 'deleteAlumn')->name('deleteAlumn')->middleware('AuthCheck');
     Route::post('/addSubject', 'addSubject')->name('addSubject')->middleware('AuthCheck');
     Route::post('/modifySubject', 'modifySubject')->name('modifySubject')->middleware('AuthCheck');
+    Route::get('/createPractice', 'createPractice')->name('createPractice')->middleware('AuthCheck');
     Route::post('/addPractice', 'addPractice')->name('addPractice')->middleware('AuthCheck');
     Route::post('/modifyPractice', 'modifyPractice')->name('modifyPractice')->middleware('AuthCheck');
     Route::post('/modifySession', 'modifySession')->name('modifySession')->middleware('AuthCheck');
+    Route::get('/modifyAdministrator/{id_practica}', 'modifyAdministrator')->name('modifyAdministrator')->middleware('AuthCheck');
     Route::post('/addSession', 'addSession')->name('addSession')->middleware('AuthCheck');
     Route::post('/deletePractice/{id_practica}', 'deletePractice')->name('deletePractice')->middleware('AuthCheck');
     Route::post('/deleteSubject/{id_asignatura}', 'deleteSubject')->name('deleteSubject')->middleware('AuthCheck');
+    Route::get('/deleteSession/{id_sesion}', 'deleteSession')->name('deleteSession')->middleware('AuthCheck');
+    Route::get('/deleteAlumn/{id_alumno}', 'deleteAlumn')->name('deleteAlumn')->middleware('AuthCheck');
     Route::post('/destructionSession/{id_sesion}', 'destructionSession')->name('destructionSession')->middleware('AuthCheck');
     Route::post('/destructionPractice/{id_practica}', 'destructionPractice')->name('destructionPractice')->middleware('AuthCheck');
     Route::post('/destructionSubject/{id_asignatura}', 'destructionSubject')->name('destructionSubject')->middleware('AuthCheck');
     Route::post('/destructionAlumn/{id_alumno}', 'destructionAlumn')->name('destructionAlumn')->middleware('AuthCheck');
     Route::post('/destructionAdministrator', 'destructionAdministrator')->name('destructionAdministrator')->middleware('AuthCheck');
     Route::post('/changeAdmin', 'changeAdmin')->name('changeAdmin')->middleware('AuthCheck');
-    Route::get('/addSubject', 'muro')->name('addSubjectGet')->middleware('AuthCheck');
+	Route::get('/addSubject', 'muro')->name('addSubjectGet')->middleware('AuthCheck');
     Route::get('/modifySubject', 'muro')->name('modifySubjectGet')->middleware('AuthCheck');
     Route::get('/addPractice', 'muro')->name('addPracticeGet')->middleware('AuthCheck');
     Route::get('/modifyPractice', 'muro')->name('modifyPracticeGet')->middleware('AuthCheck');
@@ -61,7 +61,7 @@ Route::controller(AdministradorController::class)->group(function(){
     Route::get('/changeAdmin', 'muro')->name('changeAdminGet')->middleware('AuthCheck');
 });
 Route::controller(Controller::class)->group(function(){
-    Route::get('/', 'muro')->name('principal');
+    Route::get('/', 'muro')->name('muro');
     Route::get('/muro', 'muro')->name('muro');
     Route::get('/practica/{id_practica}', 'practica')->name('practica');
     Route::get('/inscripcion', 'inscripcion')->name('inscripcion');
@@ -69,6 +69,6 @@ Route::controller(Controller::class)->group(function(){
     Route::post('/changeScore', 'changeScore')->name('changeScore');
     Route::get('/calificaciones/{id_calificaciones}', 'calificaciones')->name('calificaciones');
     Route::get('/pdf/{id_asignatura}/{id_pdf}', 'descargar')->name('descargar');
-    Route::get('/storageAlumno', 'muro')->name('storageAlumnoGet');
+	Route::get('/storageAlumno', 'muro')->name('storageAlumnoGet');
     Route::get('/changeScore', 'muro')->name('changeScoreGet');
 });

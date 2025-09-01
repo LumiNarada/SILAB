@@ -45,7 +45,7 @@
 @else
     <nav class="navbar navbar-expand-lg sticky-top bg-body" id="navbar-complete" style="background: #cd171e;">
         <div class="container-fluid" id="nav-container"><a class="navbar-brand" id="navbarcito" style="background: #cd171e;color: #faf8fb;font-size: 38px;"><img class="logo" src={{asset('assets/img/UNAM.png')}}><img id="ing" class="logo" src={{asset('assets/img/FI.png')}} width="65" height="70" style="margin-right: 30px;"><strong id="silabnavbar">{{ __('SILAB') }}</strong></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Sistema de inscripción para prácticas optativas de las asignaturas de Matemáticas y de Ciencias Aplicadas <br> de la División de Ciencias Básicas de la Facultad de Ingeniería de la UNAM.</p>
+            <p id="titulo-silab" style="color: #faf8fb; margin:auto; font-size: x-small">Ssistema de inscripción para prácticas optativas de las asignaturas de Matemáticas y de Ciencias Aplicadas <br> de la División de Ciencias Básicas de la Facultad de Ingeniería de la UNAM.</p>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav d-lg-flex ms-auto justify-content-lg-center">
                     <li class="nav-item"><a class="nav-link" href="https://dcb.ingenieria.unam.mx" style="color: #faf8fb; margin-left: 5px; margin-right: 5px">División de Ciencias Básicas</a></li>
