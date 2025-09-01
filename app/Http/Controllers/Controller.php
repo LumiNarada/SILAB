@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Administrador;
 use App\Models\Asignatura;
-use App\Models\Alumno;
+use App\Models\alumno;
 use App\Models\Carrera;
 use App\Models\Practica;
 use App\Models\Sesion;
